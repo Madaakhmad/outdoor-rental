@@ -1,7 +1,6 @@
 <?php
 $isAdmin = isset($_SESSION['login']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 ?>
-
 <footer>
     <p>&copy; <?= date("Y"); ?> <?= defined('APP_NAME') ? APP_NAME : 'Outdoor Rental'; ?>. Semua Hak Dilindungi.</p>
 </footer>
@@ -15,8 +14,6 @@ $isAdmin = isset($_SESSION['login']) && isset($_SESSION['role']) && $_SESSION['r
         <span>💬</span> Chat Admin WA
     </a>
 <?php } ?>
-
-</div> <!-- Tag penutup untuk <div id="app"> -->
 
 </body>
 
