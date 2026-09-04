@@ -1,6 +1,7 @@
 <?php
 
 // hallo aku chandra hehehe
+// testing 123
 
 require_once 'config/config.php';
 require_once 'config/functions.php';
