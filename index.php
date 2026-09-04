@@ -3,6 +3,7 @@
 // hallo aku chandra hehehe
 // awokawoakwosakw
 // testing 123
+// blablablablablalbalaablabalbaa
 
 require_once 'config/config.php';
 require_once 'config/functions.php';
@@ -16,7 +17,7 @@ $initialKeyword = trim($_GET['search'] ?? '');
 $initialKategori = trim($_GET['kategori'] ?? '');
 
 include 'includes/header.php';
-
+// wlewlewlelwelwleew
 ?>
 
 <section class="hero">
