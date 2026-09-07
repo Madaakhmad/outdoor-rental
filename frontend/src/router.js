@@ -3,10 +3,10 @@ import Home from './pages/Home.vue'
 import Halaman from './pages/Halaman.vue'
 
 const routes = [
-  // {
-  //   path: '/',
-  //   redirect: '/home'
-  // },
+  {
+    path: '/',
+    redirect: '/home'
+  },
   {
     path: '/home',
     name: 'home',
@@ -22,7 +22,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 
