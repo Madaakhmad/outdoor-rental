@@ -56,7 +56,7 @@ include '../includes/header.php';
     <div class="auth-header">
         <div class="auth-icon">🔑</div>
         <h2>Masuk ke Akun Anda</h2>
-        <p class="text-muted">Gunakan akun Anda untuk booking dan memantau riwayat sewa.</p>
+        <p class="text-muted">Gunakan akun Anda untuk menyewa peralatan outdoor dan memantau riwayat transaksi.</p>
     </div>
 
     <?php if (isset($_GET['register']) && $_GET['register'] === 'success') { ?>
@@ -72,19 +72,19 @@ include '../includes/header.php';
     <?php } ?>
 
     <form action="" method="POST" class="auth-form">
-        <label>Username</label>
+        <label>Nama Pengguna (Username)</label>
         <input
             type="text"
             name="username"
-            placeholder="Masukkan username"
+            placeholder="Masukkan nama pengguna"
             value="<?= htmlspecialchars($_POST['username'] ?? ''); ?>"
             required>
 
-        <label>Password</label>
+        <label>Kata Sandi (Password)</label>
         <input
             type="password"
             name="password"
-            placeholder="Masukkan password"
+            placeholder="Masukkan kata sandi"
             required>
 
         <button

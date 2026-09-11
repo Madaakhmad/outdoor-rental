@@ -17,9 +17,9 @@ include '../includes/header.php';
 
 <section class="detail-section">
     <div class="breadcrumb">
-        <a href="../index.php">Home</a> <span>›</span> 
-        <a href="peralatan.php">Peralatan</a> <span>›</span> 
-        <strong><?= $produk ? htmlspecialchars($produk['nama']) : 'Detail Alat'; ?></strong>
+        <a href="../index.php">Beranda</a> <span>›</span> 
+        <a href="peralatan.php">Katalog Peralatan</a> <span>›</span> 
+        <strong><?= $produk ? htmlspecialchars($produk['nama']) : 'Rincian Alat'; ?></strong>
     </div>
 
     <?php if (!$produk) { ?>
@@ -35,7 +35,8 @@ include '../includes/header.php';
             <div class="detail-image-card">
                 <img
                     src="../assets/uploads/<?= htmlspecialchars($produk['gambar'] ?: 'default.jpg'); ?>"
-                    alt="<?= htmlspecialchars($produk['nama']); ?>">
+                    alt="<?= htmlspecialchars($produk['nama']); ?>"
+                    onerror="this.src='../assets/images/placeholder.jpg';">
                 <div class="image-badge-container">
                     <span class="badge-kategori"><?= htmlspecialchars($produk['kategori']); ?></span>
                     <?php if ($produk['stok'] > 0) { ?>
@@ -62,7 +63,7 @@ include '../includes/header.php';
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Sisa Kuota Stok</span>
-                        <span class="spec-val"><strong><?= $produk['stok']; ?> unit</strong> ready</span>
+                        <span class="spec-val"><strong><?= $produk['stok']; ?> unit</strong> tersedia</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Kondisi Peralatan</span>
@@ -77,7 +78,7 @@ include '../includes/header.php';
                 <div class="detail-actions mt-4">
                     <?php if ($produk['stok'] > 0) { ?>
                         <a href="booking.php?id=<?= $produk['id']; ?>" class="btn btn-primary btn-cta">
-                            ⛺ Booking Sekarang
+                            ⛺ Sewa Sekarang
                         </a>
                     <?php } else { ?>
                         <button class="btn btn-disabled btn-cta" disabled>
@@ -85,7 +86,7 @@ include '../includes/header.php';
                         </button>
                     <?php } ?>
 
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Outdoor%20Rental,%20saya%20tertarik%20menyewa%20<?= urlencode($produk['nama']); ?>" target="_blank" class="btn btn-whatsapp">
+                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Mada%20Adventure,%20saya%20tertarik%20menyewa%20<?= urlencode($produk['nama']); ?>" target="_blank" class="btn btn-whatsapp">
                         💬 Tanya via WhatsApp
                     </a>
                     
@@ -105,8 +106,8 @@ include '../includes/header.php';
                     <div class="bullet-item">
                         <span>⚡</span>
                         <div>
-                            <strong>Booking Cepat & Mudah</strong>
-                            <p>Proses pemesanan online instan dengan bukti nota digital.</p>
+                            <strong>Pemesanan Cepat & Mudah</strong>
+                            <p>Proses pemesanan daring instan dengan bukti nota digital resmi.</p>
                         </div>
                     </div>
                 </div>

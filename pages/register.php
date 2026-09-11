@@ -94,26 +94,26 @@ include '../includes/header.php';
             value="<?= htmlspecialchars($_POST['nama'] ?? ''); ?>"
             required>
 
-        <label>Username</label>
+        <label>Nama Pengguna (Username)</label>
         <input
             type="text"
             name="username"
-            placeholder="Pilih username"
+            placeholder="Pilih nama pengguna"
             value="<?= htmlspecialchars($_POST['username'] ?? ''); ?>"
             required>
 
-        <label>Password</label>
+        <label>Kata Sandi (Password)</label>
         <input
             type="password"
             name="password"
             placeholder="Minimal 4 karakter"
             required>
 
-        <label>Konfirmasi Password</label>
+        <label>Konfirmasi Kata Sandi</label>
         <input
             type="password"
             name="konfirmasi"
-            placeholder="Ulangi password di atas"
+            placeholder="Ulangi kata sandi di atas"
             required>
 
         <button

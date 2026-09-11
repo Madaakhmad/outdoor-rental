@@ -4,7 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-define('APP_NAME', 'Outdoor Rental');
+define('APP_NAME', 'Mada Adventure');
+define('APP_SUBTITLE', 'Outdoor Rental');
 
 // Deteksi otomatis BASE_URL (mendukung Localhost, Port Forwarding, DevTunnels, Ngrok, Cloudflare Tunnel)
 if (!defined('BASE_URL')) {
@@ -28,15 +29,15 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', $protocol . $httpHost . $subDir);
 }
 
-$host = "sql106.infinityfree.com";
-$user = "if0_42804887";
-$pass = "U3AhtjnLt1UXfRD";
-$db   = "if0_42804887_db_outdoor_rental";
+// $host = "sql106.infinityfree.com";
+// $user = "if0_42804887";
+// $pass = "U3AhtjnLt1UXfRD";
+// $db   = "if0_42804887_db_outdoor_rental";
 
-// $host = "localhost";
-// $user = "root";
-// $pass = "root";
-// $db   = "outdoor_rental";
+$host = "localhost";
+$user = "root";
+$pass = "root";
+$db   = "outdoor_rental";
 
 try {
     $conn = mysqli_connect($host, $user, $pass, $db);

@@ -29,12 +29,12 @@ if (isset($_POST['upload_susulan'])) {
         );
         mysqli_stmt_bind_param($stmtUp, "sii", $gambar, $idBooking, $idUser);
         if (mysqli_stmt_execute($stmtUp)) {
-            $pesanSukses = "Bukti pembayaran berhasil diunggah! Menunggu verifikasi admin.";
+            $pesanSukses = "Bukti pembayaran berhasil diunggah! Menunggu verifikasi dari admin.";
         } else {
             $pesanError = "Gagal memperbarui data pembayaran.";
         }
     } else {
-        $pesanError = "File bukti pembayaran tidak valid atau terlalu besar (Maks 3 MB).";
+        $pesanError = "Berkas bukti pembayaran tidak valid atau terlalu besar (Maksimal 3 MB).";
     }
 }
 
@@ -62,12 +62,12 @@ include '../includes/header.php';
 ?>
 
 <section class="riwayat-section">
-    <h2>Riwayat Booking Saya</h2>
+    <h2>Riwayat Penyewaan Saya</h2>
     <p>Halo, <strong><?= htmlspecialchars($_SESSION['nama']); ?></strong>. Berikut adalah daftar riwayat transaksi penyewaan alat outdoor Anda.</p>
 
     <?php if (isset($_GET['success'])) { ?>
         <div class="success-box">
-            Booking Anda berhasil dibuat! Silakan lakukan pembayaran dan simpan nota pemesanan Anda.
+            ✓ Penyewaan Anda berhasil dibuat! Silakan lakukan pembayaran dan simpan nota pemesanan Anda.
         </div>
     <?php } ?>
 
@@ -81,7 +81,7 @@ include '../includes/header.php';
 
     <?php if (mysqli_num_rows($query) == 0) { ?>
         <div class="empty-state">
-            <p>Anda belum memiliki riwayat booking peralatan.</p>
+            <p>Anda belum memiliki riwayat transaksi penyewaan peralatan.</p>
             <a href="peralatan.php" class="btn btn-katalog mt-3">Mulai Sewa Sekarang →</a>
         </div>
     <?php } else { ?>
@@ -90,12 +90,13 @@ include '../includes/header.php';
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>ID Transaksi</th>
                         <th>Peralatan</th>
                         <th>Periode Sewa</th>
                         <th>Unit & Durasi</th>
                         <th>Total Biaya</th>
-                        <th>Pembayaran</th>
-                        <th>Status Booking</th>
+                        <th>Status Pembayaran</th>
+                        <th>Status Sewa</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -106,6 +107,7 @@ include '../includes/header.php';
                     ?>
                         <tr>
                             <td><?= $no++; ?></td>
+                            <td><strong>#BK-<?= str_pad($booking['id'], 4, '0', STR_PAD_LEFT); ?></strong></td>
                             <td>
                                 <strong><?= htmlspecialchars($booking['nama_peralatan']); ?></strong>
                             </td>
@@ -130,7 +132,7 @@ include '../includes/header.php';
                                     <span class="badge badge-warning">Verifikasi</span>
                                 <?php } else { ?>
                                     <span class="badge badge-danger">Belum Bayar</span>
-                                    <button onclick="document.getElementById('upload-modal-<?= $booking['id']; ?>').style.display='block'" class="btn-sm btn-outline mt-1">Upload Bukti</button>
+                                    <button onclick="document.getElementById('upload-modal-<?= $booking['id']; ?>').style.display='block'" class="btn-sm btn-outline mt-1">Unggah Bukti</button>
                                 <?php } ?>
                             </td>
                             <td>
@@ -151,22 +153,22 @@ include '../includes/header.php';
                             </td>
                         </tr>
 
-                        <!-- Modal Upload Bukti -->
+                        <!-- Modal Unggah Bukti -->
                         <div id="upload-modal-<?= $booking['id']; ?>" class="modal-backdrop" style="display:none;">
                             <div class="modal-box">
-                                <h3>Upload Bukti Pembayaran #<?= $booking['id']; ?></h3>
-                                <p>Transfer total <strong><?= rupiah($booking['total_harga'] + $booking['denda']); ?></strong> ke rekening resmi:</p>
+                                <h3>Unggah Bukti Pembayaran #<?= $booking['id']; ?></h3>
+                                <p>Transfer total <strong><?= rupiah($booking['total_harga'] + $booking['denda']); ?></strong> ke salah satu rekening resmi:</p>
                                 <div class="bank-mini-list mb-3">
                                     <div class="bank-mini-item"><strong>BCA:</strong> <code>123-456-7890</code></div>
                                     <div class="bank-mini-item"><strong>BRI:</strong> <code>0987-01-000123-50-1</code></div>
                                     <div class="bank-mini-item"><strong>Mandiri:</strong> <code>137-00-1234567-8</code></div>
-                                    <div class="bank-mini-item"><strong>E-Wallet:</strong> <code>0812-3456-7890</code></div>
+                                    <div class="bank-mini-item"><strong>Dompet Digital:</strong> <code>0812-3456-7890</code></div>
                                 </div>
                                 <form method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="id_booking" value="<?= $booking['id']; ?>">
                                     <input type="file" name="bukti_file" accept=".jpg,.jpeg,.png,.webp" required>
                                     <div class="mt-3" style="display:flex; gap:8px;">
-                                        <button type="submit" name="upload_susulan" class="btn btn-primary" style="flex:1;">Kirim Bukti</button>
+                                        <button type="submit" name="upload_susulan" class="btn btn-primary" style="flex:1;">Kirim Bukti Pembayaran</button>
                                         <button type="button" onclick="document.getElementById('upload-modal-<?= $booking['id']; ?>').style.display='none'" class="btn btn-secondary">Batal</button>
                                     </div>
                                 </form>

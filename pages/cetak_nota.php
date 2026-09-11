@@ -198,10 +198,10 @@ $grandTotal = $data['total_harga'] + $data['denda'];
         <div class="invoice-header">
             <div>
                 <div class="brand-title"><?= APP_NAME; ?></div>
-                <div class="brand-subtitle">Penyewaan Alat Camping & Kegiatan Outdoor</div>
+                <div class="brand-subtitle">Outdoor Rental - Penyewaan Alat Camping & Kegiatan Gunung</div>
             </div>
             <div class="invoice-number">
-                <h2>NOTA BOOKING</h2>
+                <h2>NOTA PENYEWAAN</h2>
                 <p>No: <strong>#BK-<?= str_pad($data['id'], 5, '0', STR_PAD_LEFT); ?></strong></p>
                 <p>Tgl Dibuat: <?= date('d/m/Y H:i', strtotime($data['created_at'])); ?></p>
             </div>
@@ -247,7 +247,7 @@ $grandTotal = $data['total_harga'] + $data['denda'];
 
         <div class="total-section">
             <div>
-                <p>Status Booking: 
+                <p>Status Sewa: 
                     <?php if ($data['status'] === 'Disetujui') { ?>
                         <span class="status-badge badge-success">Disetujui</span>
                     <?php } elseif ($data['status'] === 'Dikembalikan') { ?>
@@ -273,14 +273,14 @@ $grandTotal = $data['total_harga'] + $data['denda'];
                 <?php if ($data['denda'] > 0) { ?>
                     <p style="color:#b91c1c;">Denda Keterlambatan: <strong>+ <?= rupiah($data['denda']); ?></strong></p>
                 <?php } ?>
-                <h3 style="color:#1f2937; margin-top: 5px;">Grand Total: <?= rupiah($grandTotal); ?></h3>
+                <h3 style="color:#1f2937; margin-top: 5px;">Total Keseluruhan: <?= rupiah($grandTotal); ?></h3>
             </div>
         </div>
 
         <div class="invoice-footer">
             <p><strong>Syarat & Ketentuan Pengambilan Alat:</strong></p>
             <ol style="padding-left: 18px; margin-top: 5px;">
-                <li>Tunjukkan bukti nota fisik atau digital ini saat pengambilan peralatan di store.</li>
+                <li>Tunjukkan bukti nota fisik atau digital ini saat pengambilan peralatan di toko / pos rental.</li>
                 <li>Wajib meninggalkan kartu identitas asli (KTP/SIM/KTM) yang masih berlaku sebagai jaminan.</li>
                 <li>Keterlambatan pengembalian melewati tanggal kembali akan dikenakan denda harian per unit barang.</li>
                 <li>Penyewa bertanggung jawab penuh atas kebersihan dan keutuhan peralatan selama masa sewa.</li>

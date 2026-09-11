@@ -35,21 +35,22 @@ include '../includes/header.php';
 
         <button type="submit" class="btn-search">🔍 Cari Alat</button>
         <?php if ($keyword !== '' || $kategoriPilihan !== '') { ?>
-            <a href="peralatan.php" class="btn btn-reset">✕ Reset</a>
+            <a href="peralatan.php" class="btn btn-reset">✕ Atur Ulang</a>
         <?php } ?>
     </form>
 
     <div class="produk-container">
         <?php if (empty($peralatan)) { ?>
             <div class="empty-state">
-                <p>Peralatan outdoor tidak ditemukan. Coba gunakan kata kunci atau kategori lain.</p>
+                <p>Peralatan outdoor tidak ditemukan. Silakan gunakan kata kunci atau kategori lain.</p>
             </div>
         <?php } else { ?>
             <?php foreach ($peralatan as $item) { ?>
                 <div class="card">
                     <img 
                         src="../assets/uploads/<?= htmlspecialchars($item['gambar'] ?: 'default.jpg'); ?>" 
-                        alt="<?= htmlspecialchars($item['nama']); ?>">
+                        alt="<?= htmlspecialchars($item['nama']); ?>"
+                        onerror="this.src='../assets/images/placeholder.jpg';">
 
                     <span class="badge-kategori"><?= htmlspecialchars($item['kategori']); ?></span>
 
@@ -65,14 +66,14 @@ include '../includes/header.php';
 
                     <div class="card-action">
                         <a href="detail.php?id=<?= $item['id']; ?>" class="btn btn-detail">
-                            Lihat Detail
+                            Lihat Rincian
                         </a>
                         <?php if ($item['stok'] > 0) { ?>
                             <a href="booking.php?id=<?= $item['id']; ?>" class="btn btn-booking">
-                                Booking
+                                Sewa
                             </a>
                         <?php } else { ?>
-                            <button class="btn btn-disabled" disabled>Habis</button>
+                            <button class="btn btn-disabled" disabled>Stok Habis</button>
                         <?php } ?>
                     </div>
                 </div>
