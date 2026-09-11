@@ -23,8 +23,8 @@ include '../includes/header.php';
 ?>
 
 <section class="riwayat-section">
-    <h2>Kelola Data Booking Transaksi</h2>
-    <p>Daftar seluruh transaksi pemesanan alat outdoor oleh customer.</p>
+    <h2>Kelola Data Transaksi Penyewaan</h2>
+    <p>Daftar seluruh transaksi pemesanan alat outdoor oleh pelanggan.</p>
 
     <!-- Filter Status Tab -->
     <div class="filter-tab-container mt-3 mb-3">
@@ -37,7 +37,7 @@ include '../includes/header.php';
 
     <?php if (mysqli_num_rows($query) == 0) { ?>
         <div class="empty-state">
-            <p>Tidak ada transaksi booking pada kategori ini.</p>
+            <p>Tidak ada transaksi penyewaan pada kategori status ini.</p>
         </div>
     <?php } else { ?>
         <div class="table-responsive">
@@ -51,7 +51,7 @@ include '../includes/header.php';
                         <th>Unit</th>
                         <th>Total Biaya</th>
                         <th>Pembayaran</th>
-                        <th>Status Booking</th>
+                        <th>Status Sewa</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -101,10 +101,10 @@ include '../includes/header.php';
                             <td>
                                 <div style="display:flex; gap:5px;">
                                     <a href="detail_booking.php?id=<?= $booking['id']; ?>" class="btn btn-sm btn-primary">
-                                        Detail
+                                        Rincian
                                     </a>
                                     <a href="../pages/cetak_nota.php?id=<?= $booking['id']; ?>" target="_blank" class="btn btn-sm btn-print">
-                                        Nota
+                                        Cetak Nota
                                     </a>
                                 </div>
                             </td>

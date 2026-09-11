@@ -68,7 +68,7 @@ include '../includes/header.php';
         </div>
         <div style="display:flex; gap:8px;" class="no-print">
             <a href="export_laporan.php?tgl_awal=<?= urlencode($tglAwal); ?>&tgl_akhir=<?= urlencode($tglAkhir); ?>&status=<?= urlencode($statusFilter); ?>&status_bayar=<?= urlencode($bayarFilter); ?>" class="btn btn-success">
-                📥 Unduh Excel / CSV
+                📥 Unduh Laporan Excel
             </a>
             <button onclick="window.print()" class="btn btn-print">🖨️ Cetak Rekap Laporan</button>
         </div>
@@ -86,7 +86,7 @@ include '../includes/header.php';
                 <input type="date" name="tgl_akhir" value="<?= htmlspecialchars($tglAkhir); ?>" required>
             </div>
             <div>
-                <label>Status Booking:</label>
+                <label>Status Sewa:</label>
                 <select name="status">
                     <option value="">Semua Status</option>
                     <option value="Disetujui" <?= ($statusFilter === 'Disetujui') ? 'selected' : ''; ?>>Disetujui</option>
@@ -105,8 +105,8 @@ include '../includes/header.php';
                 </select>
             </div>
             <div style="display:flex; align-items:flex-end; gap:5px;">
-                <button type="submit" class="btn btn-primary">Filter Laporan</button>
-                <a href="laporan.php" class="btn btn-secondary">Reset</a>
+                <button type="submit" class="btn btn-primary">Terapkan Filter</button>
+                <a href="laporan.php" class="btn btn-secondary">Atur Ulang</a>
             </div>
         </form>
     </div>

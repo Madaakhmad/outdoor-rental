@@ -161,7 +161,7 @@ include '../includes/header.php';
     </form>
 
     <br>
-    <a href="peralatan.php">← Kembali ke Kelola Peralatan</a>
+    <a href="peralatan.php" class="btn btn-secondary">← Kembali ke Kelola Peralatan</a>
 </section>
 
 <?php

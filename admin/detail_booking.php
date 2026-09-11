@@ -193,7 +193,7 @@ include '../includes/header.php';
 ?>
 
 <section class="login form-booking-container">
-    <h2>Detail & Verifikasi Booking #<?= $booking['id']; ?></h2>
+    <h2>Rincian & Verifikasi Penyewaan #<?= $booking['id']; ?></h2>
 
     <?php if ($pesanSukses != "") { ?>
         <div class="success-box"><?= $pesanSukses; ?></div>
@@ -247,7 +247,7 @@ include '../includes/header.php';
             </td>
         </tr>
         <tr>
-            <th>Status Booking</th>
+            <th>Status Sewa</th>
             <td>
                 <?php if ($booking['status'] === 'Disetujui') { ?>
                     <span class="badge badge-success">Disetujui</span>
@@ -269,7 +269,7 @@ include '../includes/header.php';
                         <option value="Menunggu Verifikasi" <?= ($booking['status_pembayaran'] === 'Menunggu Verifikasi') ? 'selected' : ''; ?>>Menunggu Verifikasi</option>
                         <option value="Lunas" <?= ($booking['status_pembayaran'] === 'Lunas') ? 'selected' : ''; ?>>Lunas</option>
                     </select>
-                    <button type="submit" name="update_pembayaran" class="btn btn-sm btn-primary">Ubah Status</button>
+                    <button type="submit" name="update_pembayaran" class="btn btn-sm btn-primary">Simpan Status</button>
                 </form>
             </td>
         </tr>
@@ -282,7 +282,7 @@ include '../includes/header.php';
                     </a>
                     <br><small><a href="../assets/uploads/<?= htmlspecialchars($booking['bukti_pembayaran']); ?>" target="_blank">Lihat Gambar Penuh ↗</a></small>
                 <?php } else { ?>
-                    <span class="text-muted">Customer belum mengunggah bukti pembayaran.</span>
+                    <span class="text-muted">Pelanggan belum mengunggah bukti pembayaran.</span>
                 <?php } ?>
             </td>
         </tr>
@@ -290,21 +290,30 @@ include '../includes/header.php';
 
     <div class="mt-4" style="display:flex; gap:10px; flex-wrap:wrap;">
         <?php if ($booking['status'] === 'Menunggu') { ?>
-            <form method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menyetujui booking ini? Stok akan otomatis dikurangi.');">
-                <button type="submit" name="setujui" class="btn btn-success">✓ Setujui Booking</button>
+            <form method="POST" id="formSetujui">
+                <input type="hidden" name="setujui" value="1">
+                <button type="button" class="btn btn-success" onclick="konfirmasiForm('formSetujui', 'Setujui Penyewaan?', 'Stok inventaris akan otomatis dikurangi sebanyak <?= $booking['jumlah']; ?> unit.', 'question', '✓ Ya, Setujui', '#10b981')">
+                    ✓ Setujui Penyewaan
+                </button>
             </form>
 
-            <form method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menolak booking ini?');">
-                <button type="submit" name="tolak" class="btn btn-danger">✕ Tolak Booking</button>
+            <form method="POST" id="formTolak">
+                <input type="hidden" name="tolak" value="1">
+                <button type="button" class="btn btn-danger" onclick="konfirmasiForm('formTolak', 'Tolak Penyewaan?', 'Apakah Anda yakin ingin menolak transaksi penyewaan ini?', 'warning', '✕ Ya, Tolak', '#ef4444')">
+                    ✕ Tolak Penyewaan
+                </button>
             </form>
         <?php } elseif ($booking['status'] === 'Disetujui') { ?>
-            <form method="POST" onsubmit="return confirm('Apakah peralatan sudah dikembalikan lengkap? Stok akan otomatis dikembalikan ke inventaris.');">
-                <button type="submit" name="kembalikan" class="btn btn-primary">📦 Tandai Dikembalikan</button>
+            <form method="POST" id="formKembalikan">
+                <input type="hidden" name="kembalikan" value="1">
+                <button type="button" class="btn btn-primary" onclick="konfirmasiForm('formKembalikan', 'Tandai Selesai & Dikembalikan?', 'Peralatan telah diperiksa lengkap dan stok akan otomatis dikembalikan ke inventaris.', 'info', '📦 Ya, Tandai Kembali', '#0ea5e9')">
+                    📦 Tandai Alat Dikembalikan
+                </button>
             </form>
         <?php } ?>
 
         <a href="../pages/cetak_nota.php?id=<?= $booking['id']; ?>" target="_blank" class="btn btn-print">🖨️ Cetak Nota</a>
-        <a href="booking.php" class="btn btn-secondary">← Kembali ke Data Booking</a>
+        <a href="booking.php" class="btn btn-secondary">← Kembali ke Data Penyewaan</a>
     </div>
 </section>
 

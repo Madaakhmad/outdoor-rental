@@ -35,7 +35,7 @@ include '../includes/header.php';
 
     <?php if (isset($_GET['error'])) { ?>
         <?php if ($_GET['error'] === 'has_booking') { ?>
-            <div class="error-box">✕ Peralatan tidak dapat dihapus karena masih memiliki riwayat transaksi booking.</div>
+            <div class="error-box">✕ Peralatan tidak dapat dihapus karena masih memiliki riwayat transaksi penyewaan.</div>
         <?php } elseif ($_GET['error'] === 'not_found') { ?>
             <div class="error-box">✕ Peralatan tidak ditemukan.</div>
         <?php } elseif ($_GET['error'] === 'delete_failed') { ?>
@@ -73,9 +73,10 @@ include '../includes/header.php';
                                         src="../assets/uploads/<?= htmlspecialchars($item['gambar']); ?>"
                                         alt="<?= htmlspecialchars($item['nama']); ?>"
                                         width="70"
-                                        style="border-radius: 6px; object-fit: cover; height: 50px;">
+                                        style="border-radius: 6px; object-fit: cover; height: 50px;"
+                                        onerror="this.src='../assets/images/placeholder.jpg';">
                                 <?php } else { ?>
-                                    <span class="text-muted">No Image</span>
+                                    <span class="text-muted">Tanpa Foto</span>
                                 <?php } ?>
                             </td>
                             <td><strong><?= htmlspecialchars($item['nama']); ?></strong></td>
@@ -91,8 +92,8 @@ include '../includes/header.php';
                             </td>
                             <td>
                                 <div style="display: flex; gap: 6px;">
-                                    <a href="edit_peralatan.php?id=<?= $item['id']; ?>" class="btn btn-sm btn-primary">Edit</a>
-                                    <a href="hapus_peralatan.php?id=<?= $item['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus peralatan ini?');">Hapus</a>
+                                    <a href="edit_peralatan.php?id=<?= $item['id']; ?>" class="btn btn-sm btn-primary">Ubah</a>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="konfirmasiHapus('hapus_peralatan.php?id=<?= $item['id']; ?>', 'Hapus Peralatan Ini?', 'Peralatan <?= htmlspecialchars(addslashes($item['nama'])); ?> akan dihapus permanen dari sistem.')">Hapus</button>
                                 </div>
                             </td>
                         </tr>
@@ -103,7 +104,7 @@ include '../includes/header.php';
     <?php } ?>
 
     <br>
-    <a href="index.php" class="btn btn-secondary">← Kembali ke Dashboard</a>
+    <a href="index.php" class="btn btn-secondary">← Kembali ke Dasbor Admin</a>
 </section>
 
 <?php

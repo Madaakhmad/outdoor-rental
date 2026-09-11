@@ -9,19 +9,19 @@ cekAdmin();
 // METRIK STATISTIK DASHBOARD
 // =====================================
 
-// 1. Total Booking
+// 1. Total Transaksi
 $qTotal = mysqli_query($conn, "SELECT COUNT(*) AS total FROM booking");
 $totalBooking = (int) mysqli_fetch_assoc($qTotal)['total'];
 
-// 2. Booking Menunggu
+// 2. Transaksi Menunggu
 $qMenunggu = mysqli_query($conn, "SELECT COUNT(*) AS total FROM booking WHERE status = 'Menunggu'");
 $totalMenunggu = (int) mysqli_fetch_assoc($qMenunggu)['total'];
 
-// 3. Booking Disetujui
+// 3. Transaksi Disetujui
 $qDisetujui = mysqli_query($conn, "SELECT COUNT(*) AS total FROM booking WHERE status = 'Disetujui'");
 $totalDisetujui = (int) mysqli_fetch_assoc($qDisetujui)['total'];
 
-// 4. Booking Dikembalikan
+// 4. Transaksi Dikembalikan
 $qKembali = mysqli_query($conn, "SELECT COUNT(*) AS total FROM booking WHERE status = 'Dikembalikan'");
 $totalDikembalikan = (int) mysqli_fetch_assoc($qKembali)['total'];
 
@@ -35,7 +35,7 @@ $totalUnitStok = (int) ($dataPeralatan['total_unit'] ?? 0);
 $qPendapatan = mysqli_query($conn, "SELECT SUM(total_harga + denda) AS grand_omzet FROM booking WHERE status IN ('Disetujui', 'Dikembalikan')");
 $grandOmzet = (int) (mysqli_fetch_assoc($qPendapatan)['grand_omzet'] ?? 0);
 
-// 7. Booking Terbaru (Limit 5)
+// 7. Transaksi Terbaru (Limit 5)
 $qTerbaru = mysqli_query(
     $conn,
     "SELECT booking.*, peralatan.nama AS nama_peralatan 
@@ -51,12 +51,12 @@ include '../includes/header.php';
 <section class="riwayat-section">
     <div class="header-action-container">
         <div>
-            <h2>Dashboard Utama Admin</h2>
-            <p>Selamat datang, <strong><?= htmlspecialchars($_SESSION['nama']); ?></strong>. Pantau metrik rental secara realtime.</p>
+            <h2>Dasbor Utama Admin</h2>
+            <p>Selamat datang, <strong><?= htmlspecialchars($_SESSION['nama']); ?></strong>. Pantau metrik penyewaan secara langsung.</p>
         </div>
         <div style="display:flex; gap:10px;">
             <a href="tambah_peralatan.php" class="btn btn-primary">+ Tambah Peralatan</a>
-            <a href="laporan.php" class="btn btn-secondary">📊 Laporan Omzet</a>
+            <a href="laporan.php" class="btn btn-secondary">📊 Laporan Keuangan</a>
         </div>
     </div>
 
@@ -78,22 +78,22 @@ include '../includes/header.php';
             <a href="peralatan.php" class="text-sm">Kelola Stok →</a>
         </div>
         <div class="stat-box">
-            <h3>Total Omzet Rental</h3>
+            <h3>Total Pendapatan Sewa</h3>
             <p style="font-size:22px; color:#1f2937;"><?= rupiah($grandOmzet); ?></p>
             <a href="laporan.php" class="text-sm">Buka Laporan Keuangan →</a>
         </div>
     </div>
 
-    <!-- Tabel Booking Terbaru -->
+    <!-- Tabel Transaksi Terbaru -->
     <div class="mt-5">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3>5 Transaksi Booking Terbaru</h3>
-            <a href="booking.php" class="btn btn-sm btn-outline">Lihat Semua Data Booking →</a>
+            <h3>5 Transaksi Penyewaan Terbaru</h3>
+            <a href="booking.php" class="btn btn-sm btn-outline">Lihat Semua Data Penyewaan →</a>
         </div>
 
         <?php if (mysqli_num_rows($qTerbaru) == 0) { ?>
             <div class="empty-state">
-                <p>Belum ada aktivitas transaksi booking.</p>
+                <p>Belum ada aktivitas transaksi penyewaan.</p>
             </div>
         <?php } else { ?>
             <div class="table-responsive">
@@ -141,7 +141,7 @@ include '../includes/header.php';
                                     <?php } ?>
                                 </td>
                                 <td>
-                                    <a href="detail_booking.php?id=<?= $b['id']; ?>" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="detail_booking.php?id=<?= $b['id']; ?>" class="btn btn-sm btn-primary">Rincian</a>
                                 </td>
                             </tr>
                         <?php } ?>

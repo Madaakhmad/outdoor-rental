@@ -174,7 +174,7 @@ include '../includes/header.php';
 ?>
 
 <section class="login form-booking-container">
-    <h2>Form Booking Peralatan</h2>
+    <h2>Formulir Penyewaan Peralatan</h2>
 
     <?php if (!empty($errors)) { ?>
         <div class="error-box">
@@ -191,7 +191,8 @@ include '../includes/header.php';
         <img
             src="../assets/uploads/<?= htmlspecialchars($produk['gambar'] ?: 'default.jpg'); ?>"
             alt="<?= htmlspecialchars($produk['nama']); ?>"
-            style="width: 160px; height: 120px; object-fit: cover;">
+            style="width: 160px; height: 120px; object-fit: cover;"
+            onerror="this.src='../assets/images/placeholder.jpg';">
         <div>
             <h3><?= htmlspecialchars($produk['nama']); ?></h3>
             <p>Kategori: <strong><?= htmlspecialchars($produk['kategori']); ?></strong></p>
@@ -229,7 +230,7 @@ include '../includes/header.php';
             </div>
 
             <div>
-                <label>Lama Sewa (Hari)</label>
+                <label>Durasi Sewa (Hari)</label>
                 <input
                     type="number"
                     name="lama"
@@ -265,32 +266,32 @@ include '../includes/header.php';
                 <div class="bank-item">
                     <span class="bank-badge">BCA</span>
                     <strong>123-456-7890</strong>
-                    <small>a.n. Outdoor Rental Official</small>
+                    <small>a.n. Mada Adventure Official</small>
                 </div>
                 <div class="bank-item">
                     <span class="bank-badge">BRI</span>
                     <strong>0987-01-000123-50-1</strong>
-                    <small>a.n. Outdoor Rental Official</small>
+                    <small>a.n. Mada Adventure Official</small>
                 </div>
                 <div class="bank-item">
                     <span class="bank-badge">Mandiri</span>
                     <strong>137-00-1234567-8</strong>
-                    <small>a.n. Outdoor Rental Official</small>
+                    <small>a.n. Mada Adventure Official</small>
                 </div>
                 <div class="bank-item">
-                    <span class="bank-badge">E-Wallet</span>
+                    <span class="bank-badge">Dompet Digital</span>
                     <strong>0812-3456-7890</strong>
                     <small>DANA / GoPay / ShopeePay</small>
                 </div>
             </div>
         </div>
 
-        <label class="mt-3">Upload Bukti Pembayaran / DP (Opsional)</label>
+        <label class="mt-3">Unggah Bukti Pembayaran / DP (Opsional)</label>
         <input
             type="file"
             name="bukti_pembayaran"
             accept=".jpg,.jpeg,.png,.webp">
-        <small class="text-muted">Bisa diunggah sekarang atau nanti melalui menu Riwayat Booking.</small>
+        <small class="text-muted">Dapat diunggah sekarang atau nanti melalui menu Riwayat Sewa.</small>
 
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button
@@ -298,7 +299,7 @@ include '../includes/header.php';
                 name="booking"
                 class="btn btn-primary btn-cta"
                 style="flex: 2;">
-                ✓ Konfirmasi Booking
+                ✓ Konfirmasi Penyewaan
             </button>
             <a href="peralatan.php" class="btn btn-secondary" style="flex: 1; text-align:center;">
                 Batal

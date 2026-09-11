@@ -1,5 +1,9 @@
 <?php
 
+// Matikan deprecation dan error display agar tidak mengotori output file Excel
+error_reporting(0);
+ini_set('display_errors', '0');
+
 require_once '../config/config.php';
 require_once '../config/functions.php';
 
@@ -44,197 +48,138 @@ mysqli_stmt_bind_param($stmt, $types, ...$params);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-function columnToLetter(int $column): string
-{
-    $letter = '';
-    while ($column > 0) {
-        $mod = ($column - 1) % 26;
-        $letter = chr(65 + $mod) . $letter;
-        $column = intdiv($column - 1, 26);
-    }
-    return $letter;
-}
-
-function xlsxCellXml(int $columnIndex, int $rowIndex, $value): string
-{
-    $cellRef = columnToLetter($columnIndex + 1) . $rowIndex;
-    $text = $value === null ? '' : (string) $value;
-    $escaped = htmlspecialchars($text, ENT_QUOTES | ENT_XML1, 'UTF-8');
-
-    return '<c r="' . $cellRef . '" t="inlineStr"><is><t xml:space="preserve">' . $escaped . '</t></is></c>';
-}
-
-function xlsxRowXml(array $row, int $rowIndex): string
-{
-    $cells = '';
-    foreach ($row as $colIndex => $cellValue) {
-        $cells .= xlsxCellXml((int) $colIndex, $rowIndex, $cellValue);
-    }
-
-    return '<row r="' . $rowIndex . '">' . $cells . '</row>';
-}
-
-function xlsxWorksheetXml(array $rows): string
-{
-    $sheetData = '';
-    foreach ($rows as $index => $row) {
-        $sheetData .= xlsxRowXml($row, $index + 1);
-    }
-
-    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-    <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-        <sheetData>' . $sheetData . '</sheetData>
-    </worksheet>';
-}
-
-function buildXlsx(array $rows): string
-{
-    $zip = new ZipArchive();
-    $tempFile = tempnam(sys_get_temp_dir(), 'xlsx_');
-
-    if ($zip->open($tempFile, ZipArchive::OVERWRITE | ZipArchive::CREATE) !== true) {
-        throw new RuntimeException('Gagal membuat file Excel.');
-    }
-
-    $zip->addFromString('[Content_Types].xml', <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
-  <Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
-  <Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
-  <Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
-</Types>
-XML);
-
-    $zip->addFromString('_rels/.rels', <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
-  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>
-  <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>
-</Relationships>
-XML);
-
-    $zip->addFromString('docProps/core.xml', <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <dc:creator>Outdoor Rental</dc:creator>
-  <cp:lastModifiedBy>Outdoor Rental</cp:lastModifiedBy>
-  <dcterms:created xsi:type="dcterms:W3CDTF">2026-01-01T00:00:00Z</dcterms:created>
-  <dcterms:modified xsi:type="dcterms:W3CDTF">2026-01-01T00:00:00Z</dcterms:modified>
-</cp:coreProperties>
-XML);
-
-    $zip->addFromString('docProps/app.xml', <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
-  <Application>Microsoft Excel</Application>
-</Properties>
-XML);
-
-    $zip->addFromString('xl/workbook.xml', <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <sheets>
-    <sheet name="Laporan" sheetId="1" r:id="rId1"/>
-  </sheets>
-</workbook>
-XML);
-
-    $zip->addFromString('xl/_rels/workbook.xml.rels', <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
-</Relationships>
-XML);
-
-    $zip->addFromString('xl/worksheets/sheet1.xml', xlsxWorksheetXml($rows));
-    $zip->close();
-
-    $content = file_get_contents($tempFile);
-    unlink($tempFile);
-
-    return $content;
-}
-
-// Set Header untuk Download Excel
-$filename = "Laporan_Keuangan_Outdoor_Rental_" . str_replace('-', '', $tglAwal) . "_" . str_replace('-', '', $tglAkhir) . ".xlsx";
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+// Set Header untuk Download File Excel (.xls)
+$filename = "Laporan_Keuangan_Mada_Adventure_" . str_replace('-', '', $tglAwal) . "_" . str_replace('-', '', $tglAkhir) . ".xls";
+header('Content-Type: application/vnd.ms-excel; charset=utf-8');
 header('Content-Disposition: attachment; filename="' . $filename . '"');
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Pragma: no-cache');
+header('Cache-Control: max-age=0');
 
-// Matikan output warning/deprecation agar tidak tercampur ke file Excel
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
-ini_set('display_errors', '0');
-ini_set('log_errors', '1');
+// Output tabel berformat XML/HTML yang didukung penuh oleh Microsoft Excel
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        th {
+            background-color: #1f2937;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 10px;
+            border: 1px solid #000000;
+            text-align: center;
+        }
+        td {
+            padding: 8px;
+            border: 1px solid #cccccc;
+            vertical-align: middle;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .total-row {
+            background-color: #f3f4f6;
+            font-weight: bold;
+        }
+        .title-header {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-header">LAPORAN KEUANGAN & TRANSAKSI MADA ADVENTURE (OUTDOOR RENTAL)</div>
+    <div>Periode: <?= date('d/m/Y', strtotime($tglAwal)); ?> s/d <?= date('d/m/Y', strtotime($tglAkhir)); ?></div>
+    <div>Dicetak pada: <?= date('d/m/Y H:i:s'); ?></div>
+    <br>
 
-$rows = [[
-    'No',
-    'ID Booking',
-    'Tanggal Transaksi (Dibuat)',
-    'Nama Penyewa',
-    'Username Akun',
-    'No HP/WA',
-    'Peralatan Disewa',
-    'Kategori',
-    'Jumlah Unit',
-    'Tanggal Pinjam',
-    'Tanggal Kembali',
-    'Durasi Sewa (Hari)',
-    'Biaya Sewa (Rp)',
-    'Denda (Rp)',
-    'Grand Total (Rp)',
-    'Status Pembayaran',
-    'Status Sewa'
-]];
+    <table border="1">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>ID Transaksi</th>
+                <th>Tanggal Pemesanan</th>
+                <th>Nama Penyewa</th>
+                <th>Nama Pengguna</th>
+                <th>Nomor HP / WhatsApp</th>
+                <th>Peralatan Disewa</th>
+                <th>Kategori</th>
+                <th>Jumlah Unit</th>
+                <th>Tanggal Pinjam</th>
+                <th>Tanggal Kembali</th>
+                <th>Durasi (Hari)</th>
+                <th>Biaya Sewa (Rp)</th>
+                <th>Denda (Rp)</th>
+                <th>Total Biaya (Rp)</th>
+                <th>Status Pembayaran</th>
+                <th>Status Sewa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $no = 1;
+            $totalUnitDisewa = 0;
+            $totalOmzetSewa = 0;
+            $totalDenda = 0;
+            $grandTotalSemua = 0;
 
-$no = 1;
-$totalUnitDisewa = 0;
-$totalOmzetSewa = 0;
-$totalDenda = 0;
-$grandTotalSemua = 0;
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $grand = (int) $row['total_harga'] + (int) $row['denda'];
-    $totalUnitDisewa += (int) $row['jumlah'];
-    $totalOmzetSewa += (int) $row['total_harga'];
-    $totalDenda += (int) $row['denda'];
-    $grandTotalSemua += $grand;
-
-    $rows[] = [
-        $no++,
-        '#' . $row['id'],
-        $row['created_at'],
-        $row['nama_penyewa'],
-        $row['username'],
-        "'" . $row['no_hp'],
-        $row['nama_peralatan'],
-        $row['kategori_peralatan'],
-        $row['jumlah'],
-        $row['tanggal_pinjam'],
-        $row['tanggal_kembali'],
-        $row['lama_sewa'],
-        $row['total_harga'],
-        $row['denda'],
-        $grand,
-        $row['status_pembayaran'],
-        $row['status']
-    ];
-}
-
-$rows[] = ['','','','','','','TOTAL','','','','','','','','',''];
-$rows[] = [
-    '', '', '', '', '', '', '',
-    $totalUnitDisewa,
-    '', '', '',
-    $totalOmzetSewa,
-    $totalDenda,
-    $grandTotalSemua,
-    '', ''
-];
-
-echo buildXlsx($rows);
-exit;
+            if (mysqli_num_rows($result) === 0) {
+            ?>
+                <tr>
+                    <td colspan="17" class="text-center" style="padding: 20px;">Tidak ada data transaksi pada periode ini.</td>
+                </tr>
+            <?php
+            } else {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $grand = (int) $row['total_harga'] + (int) $row['denda'];
+                    $totalUnitDisewa += (int) $row['jumlah'];
+                    $totalOmzetSewa += (int) $row['total_harga'];
+                    $totalDenda += (int) $row['denda'];
+                    $grandTotalSemua += $grand;
+            ?>
+                <tr>
+                    <td class="text-center"><?= $no++; ?></td>
+                    <td class="text-center">#<?= $row['id']; ?></td>
+                    <td class="text-center"><?= date('d/m/Y H:i', strtotime($row['created_at'])); ?></td>
+                    <td><?= htmlspecialchars($row['nama_penyewa']); ?></td>
+                    <td><?= htmlspecialchars($row['username']); ?></td>
+                    <td style="mso-number-format:'\@';"><?= htmlspecialchars($row['no_hp']); ?></td>
+                    <td><?= htmlspecialchars($row['nama_peralatan']); ?></td>
+                    <td><?= htmlspecialchars($row['kategori_peralatan']); ?></td>
+                    <td class="text-center"><?= $row['jumlah']; ?></td>
+                    <td class="text-center"><?= date('d/m/Y', strtotime($row['tanggal_pinjam'])); ?></td>
+                    <td class="text-center"><?= date('d/m/Y', strtotime($row['tanggal_kembali'])); ?></td>
+                    <td class="text-center"><?= $row['lama_sewa']; ?></td>
+                    <td class="text-right"><?= number_format($row['total_harga'], 0, ',', '.'); ?></td>
+                    <td class="text-right"><?= number_format($row['denda'], 0, ',', '.'); ?></td>
+                    <td class="text-right"><strong><?= number_format($grand, 0, ',', '.'); ?></strong></td>
+                    <td class="text-center"><?= htmlspecialchars($row['status_pembayaran']); ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['status']); ?></td>
+                </tr>
+            <?php
+                }
+            ?>
+                <tr class="total-row">
+                    <td colspan="8" class="text-right">TOTAL KESELURUHAN:</td>
+                    <td class="text-center"><?= $totalUnitDisewa; ?></td>
+                    <td colspan="3"></td>
+                    <td class="text-right"><?= number_format($totalOmzetSewa, 0, ',', '.'); ?></td>
+                    <td class="text-right"><?= number_format($totalDenda, 0, ',', '.'); ?></td>
+                    <td class="text-right"><strong><?= number_format($grandTotalSemua, 0, ',', '.'); ?></strong></td>
+                    <td colspan="2"></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</body>
+</html>
