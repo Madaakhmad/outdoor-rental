@@ -29,15 +29,15 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', $protocol . $httpHost . $subDir);
 }
 
-// $host = "sql106.infinityfree.com";
-// $user = "if0_42804887";
-// $pass = "U3AhtjnLt1UXfRD";
-// $db   = "if0_42804887_db_outdoor_rental";
+$host = "sql106.infinityfree.com";
+$user = "if0_42804887";
+$pass = "U3AhtjnLt1UXfRD";
+$db   = "if0_42804887_db_outdoor_rental";
 
-$host = "localhost";
-$user = "root";
-$pass = "root";
-$db   = "outdoor_rental";
+// $host = "localhost";
+// $user = "root";
+// $pass = "root";
+// $db   = "outdoor_rental";
 
 try {
     $conn = mysqli_connect($host, $user, $pass, $db);
