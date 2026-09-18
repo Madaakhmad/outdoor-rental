@@ -129,7 +129,7 @@ include '../includes/header.php';
                                 <?php if ($booking['status_pembayaran'] === 'Lunas') { ?>
                                     <span class="badge badge-success">Lunas</span>
                                 <?php } elseif ($booking['status_pembayaran'] === 'Menunggu Verifikasi') { ?>
-                                    <span class="badge badge-warning">Verifikasi</span>
+                                    <span class="badge badge-warning">Menunggu</span>
                                 <?php } else { ?>
                                     <span class="badge badge-danger">Belum Bayar</span>
                                     <button onclick="document.getElementById('upload-modal-<?= $booking['id']; ?>').style.display='block'" class="btn-sm btn-outline mt-1">Unggah Bukti</button>
@@ -147,9 +147,15 @@ include '../includes/header.php';
                                 <?php } ?>
                             </td>
                             <td>
-                                <a href="cetak_nota.php?id=<?= $booking['id']; ?>" target="_blank" class="btn btn-sm btn-print">
-                                    🖨️ Cetak Nota
-                                </a>
+                                <?php if ($booking['status_pembayaran'] === 'Lunas' && in_array($booking['status'], ['Disetujui', 'Dikembalikan'])) { ?>
+                                    <a href="cetak_nota.php?id=<?= $booking['id']; ?>" target="_blank" class="btn btn-sm btn-print">
+                                        🖨️ Cetak Nota
+                                    </a>
+                                <?php } else { ?>
+                                    <button class="btn btn-sm btn-disabled" disabled title="Nota hanya dapat dicetak setelah pembayaran Lunas dan sewa disetujui">
+                                        🔒 Belum Lunas
+                                    </button>
+                                <?php } ?>
                             </td>
                         </tr>
 

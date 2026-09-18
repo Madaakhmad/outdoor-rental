@@ -124,7 +124,7 @@ include '../includes/header.php';
                                     <?php if ($b['status_pembayaran'] === 'Lunas') { ?>
                                         <span class="badge badge-success">Lunas</span>
                                     <?php } elseif ($b['status_pembayaran'] === 'Menunggu Verifikasi') { ?>
-                                        <span class="badge badge-warning">Verifikasi</span>
+                                        <span class="badge badge-warning">Menunggu</span>
                                     <?php } else { ?>
                                         <span class="badge badge-danger">Belum</span>
                                     <?php } ?>
