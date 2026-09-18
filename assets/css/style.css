@@ -202,10 +202,11 @@ nav ul li a:hover {
    FILTER & SEARCH BAR (MODERN PILL DESIGN)
 ========================================= */
 .filter-bar {
+    position: relative;
     display: flex;
     align-items: center;
     background: #ffffff;
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: 50px;
     box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
     border: 2px solid #e2e8f0;
@@ -213,6 +214,7 @@ nav ul li a:hover {
     margin: 0 auto 35px auto;
     gap: 10px;
     transition: all 0.3s ease;
+    z-index: 50;
 }
 
 .filter-bar:focus-within {
@@ -220,15 +222,145 @@ nav ul li a:hover {
     box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
 }
 
-.filter-bar input {
+.search-input-wrapper {
+    position: relative;
     flex: 2;
-    min-width: 200px;
-    padding: 12px 18px;
+    min-width: 220px;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-icon {
+    font-size: 16px;
+    margin-left: 8px;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    padding: 10px 14px;
     border: none !important;
     outline: none !important;
     font-size: 14px;
     background: transparent;
     border-radius: 50px;
+    color: #1e293b;
+}
+
+/* =========================================
+   LIVE AUTOCOMPLETE SUGGESTIONS DROPDOWN
+========================================= */
+.search-suggestions-dropdown {
+    position: absolute;
+    top: calc(100% + 16px);
+    left: 0;
+    width: 100%;
+    min-width: 340px;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
+    z-index: 1000;
+    overflow: hidden;
+    max-height: 400px;
+    overflow-y: auto;
+    animation: fadeInDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.suggestion-header {
+    background: #f8fafc;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #f8fafc;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: #f1f5f9;
+    padding-left: 18px;
+}
+
+.suggestion-item img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+.suggestion-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.suggestion-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestion-meta {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.suggestion-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.badge-in-stock {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.badge-out-stock {
+    background: #fee2e2;
+    color: #b91c1c;
 }
 
 .filter-bar select {
@@ -246,48 +378,58 @@ nav ul li a:hover {
 }
 
 .btn-search {
-    background: #111827;
-    color: #f59e0b !important;
-    font-weight: 700;
+    background: #f59e0b;
+    color: #0f172a !important;
+    font-weight: 800;
     font-size: 13.5px;
     padding: 11px 22px;
     border-radius: 50px;
-    border: 1.5px solid #374151;
+    border: 1.5px solid #d97706;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 2px 8px rgba(17, 24, 39, 0.2);
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     white-space: nowrap;
 }
 
 .btn-search:hover {
-    background: #f59e0b;
-    color: #111827 !important;
-    border-color: #f59e0b;
+    background: #d97706;
+    color: #ffffff !important;
+    border-color: #b45309;
     transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.45);
 }
 
 .btn-reset {
-    background: #f1f5f9;
-    color: #475569 !important;
-    border: 1.5px solid #cbd5e1;
-    padding: 11px 18px;
+    background: #f59e0b !important;
+    color: #0f172a !important;
+    border: 1.5px solid #d97706 !important;
+    padding: 10px 20px;
     border-radius: 50px;
-    font-size: 13px;
-    font-weight: 600;
-    box-shadow: none;
+    font-size: 13.5px;
+    font-weight: 800;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3) !important;
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-reset:hover {
-    background: #e2e8f0;
-    color: #0f172a !important;
+    background: #d97706 !important;
+    color: #ffffff !important;
+    border-color: #b45309 !important;
     transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.45) !important;
+}
+
+.btn-reset:active,
+.btn-search:active {
+    transform: translateY(0);
 }
 
 .filter-box {
@@ -1168,7 +1310,11 @@ footer {
         padding: 14px;
         gap: 10px;
     }
-    .filter-bar input,
+    .search-input-wrapper {
+        width: 100%;
+        min-width: 100%;
+    }
+    .search-input-wrapper input,
     .filter-bar select,
     .btn-search,
     .btn-reset {

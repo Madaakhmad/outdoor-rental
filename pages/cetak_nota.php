@@ -43,6 +43,11 @@ if ($_SESSION['role'] !== 'admin' && $_SESSION['id_user'] != $data['id_user']) {
     die("Akses ditolak. Anda tidak memiliki izin untuk melihat nota ini.");
 }
 
+// Untuk pelanggan (bukan admin), nota hanya dapat diakses jika pembayaran sudah Lunas dan sewa disetujui/selesai
+if ($_SESSION['role'] !== 'admin' && ($data['status_pembayaran'] !== 'Lunas' || !in_array($data['status'], ['Disetujui', 'Dikembalikan']))) {
+    die("Nota belum dapat dicetak. Nota resmi hanya dapat diakses setelah status pembayaran 'Lunas' dan sewa disetujui oleh admin.");
+}
+
 $grandTotal = $data['total_harga'] + $data['denda'];
 
 ?>
